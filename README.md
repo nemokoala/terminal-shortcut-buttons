@@ -1,8 +1,19 @@
 # Terminal Shortcut Buttons
 
+[![Open VSX Version](https://img.shields.io/open-vsx/v/nemokoala/terminal-shortcut-buttons?label=Open%20VSX)](https://open-vsx.org/extension/nemokoala/terminal-shortcut-buttons)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Run your common terminal commands from configurable buttons in Cursor or VS Code.
 
 ![Command Deck preview](media/command-deck-preview.png)
+
+## Install
+
+Install from Open VSX:
+
+[Terminal Shortcut Buttons on Open VSX](https://open-vsx.org/extension/nemokoala/terminal-shortcut-buttons)
+
+In compatible editors such as Cursor, search for `Terminal Shortcut Buttons` in the Extensions view.
 
 ## Features
 
