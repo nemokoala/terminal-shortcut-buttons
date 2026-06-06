@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="Terminal Shortcut Buttons mini mode preview">
+  <rect width="1280" height="420" fill="#111827"/>
+  <text x="64" y="58" fill="#f9fafb" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Mini Mode</text>
+  <text x="64" y="88" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="16">Compact command cards for wider terminal panels.</text>
+  <g transform="translate(64 124)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#2563eb"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Dev</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm run dev</text>
+  </g>
+  <g transform="translate(296 124)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#0f766e"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Build</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm run build</text>
+  </g>
+  <g transform="translate(528 124)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#7c3aed"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Git</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">git status</text>
+  </g>
+  <g transform="translate(760 124)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#b45309"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Test</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm test</text>
+  </g>
+  <g transform="translate(992 124)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#be123c"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Deploy</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm run deploy</text>
+  </g>
+  <g transform="translate(64 224)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#4f46e5"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Lint</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm run lint</text>
+  </g>
+  <g transform="translate(296 224)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="214" height="76" rx="10" fill="#15803d"/>
+    <text x="16" y="28" fill="#ffffff" font-size="17" font-weight="700">Format</text>
+    <rect x="16" y="42" width="182" height="22" rx="5" fill="#111827" opacity=".35"/>
+    <text x="24" y="58" fill="#ffffff" font-family="Consolas, monospace" font-size="12">npm run format</text>
+  </g>
+</svg>

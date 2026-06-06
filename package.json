@@ -1,0 +1,188 @@
+{
+  "name": "terminal-shortcut-buttons",
+  "displayName": "Terminal Shortcut Buttons",
+  "description": "Adds configurable shortcut buttons for running terminal commands.",
+  "version": "0.0.1",
+  "publisher": "nemokoala",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nemokoala/terminal-shortcut-buttons.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "shortcut",
+    "button",
+    "statusbar",
+    "webview",
+    "cursor",
+    "commands"
+  ],
+  "galleryBanner": {
+    "color": "#111827",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:cursorTerminalButtons.refresh",
+    "onView:cursorTerminalButtons.deck"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorTerminalButtons.refresh",
+        "title": "Terminal Buttons: Refresh Buttons"
+      },
+      {
+        "command": "cursorTerminalButtons.openSettings",
+        "title": "Terminal Buttons: Edit Command List"
+      },
+      {
+        "command": "cursorTerminalButtons.createWorkspaceSettings",
+        "title": "Terminal Buttons: Create Workspace Settings"
+      },
+      {
+        "command": "cursorTerminalButtons.toggleCompactDeck",
+        "title": "Terminal Buttons: Toggle Command Deck Size"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cursorTerminalButtons",
+          "title": "Terminal Buttons",
+          "icon": "media/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "cursorTerminalButtons": [
+        {
+          "id": "cursorTerminalButtons.deck",
+          "name": "Command Deck",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Terminal Buttons",
+      "properties": {
+        "terminalButtons.showStatusBarButtons": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show compact command buttons in the status bar."
+        },
+        "terminalButtons.compactDeck": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use compact cards in the Command Deck webview."
+        },
+        "terminalButtons.commands": {
+          "type": "array",
+          "default": [
+            {
+              "label": "Dev",
+              "icon": "terminal",
+              "command": "npm run dev",
+              "terminalName": "Dev Server",
+              "reuseTerminal": true,
+              "description": "Start the local development server.",
+              "backgroundColor": "#2563eb",
+              "color": "#ffffff",
+              "alignment": "left",
+              "priority": 100
+            },
+            {
+              "label": "Build",
+              "icon": "gear",
+              "command": "npm run build",
+              "terminalName": "Build",
+              "reuseTerminal": false,
+              "description": "Run the production build.",
+              "backgroundColor": "#0f766e",
+              "color": "#ffffff",
+              "alignment": "left",
+              "priority": 99
+            },
+            {
+              "label": "Git",
+              "icon": "source-control",
+              "command": "git status",
+              "terminalName": "Git",
+              "reuseTerminal": true,
+              "description": "Show current repository status.",
+              "backgroundColor": "#52525b",
+              "color": "#ffffff",
+              "alignment": "left",
+              "priority": 98
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "command"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Text shown in the status bar."
+              },
+              "icon": {
+                "type": "string",
+                "description": "Optional VS Code codicon name, for example terminal, gear, play, source-control."
+              },
+              "command": {
+                "type": "string",
+                "description": "Terminal command to execute."
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional secondary text shown in the Command Deck webview."
+              },
+              "backgroundColor": {
+                "type": "string",
+                "description": "Optional CSS color for the Command Deck button background."
+              },
+              "color": {
+                "type": "string",
+                "description": "Optional CSS color for the Command Deck button text."
+              },
+              "terminalName": {
+                "type": "string",
+                "description": "Terminal name. Defaults to the button label."
+              },
+              "reuseTerminal": {
+                "type": "boolean",
+                "default": true,
+                "description": "Reuse an existing terminal with the same terminalName."
+              },
+              "alignment": {
+                "type": "string",
+                "enum": [
+                  "left",
+                  "right"
+                ],
+                "default": "left",
+                "description": "Status bar alignment."
+              },
+              "priority": {
+                "type": "number",
+                "default": 100,
+                "description": "Status bar priority. Higher values appear further left within the same alignment."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
