@@ -1,3 +1,5 @@
 .vscode/**
 .gitignore
 *.vsix
+media/command-deck-preview.svg
+media/mini-mode-preview.svg

@@ -2,7 +2,7 @@
 
 Run your common terminal commands from configurable buttons in Cursor or VS Code.
 
-![Command Deck preview](media/command-deck-preview.svg)
+![Command Deck preview](media/command-deck-preview.png)
 
 ## Features
 
@@ -19,7 +19,7 @@ Open the `Terminal Buttons` icon in the Activity Bar to use the Command Deck.
 
 The deck automatically lays buttons out in multiple columns when the panel is wide enough. Use `Mini Mode` to reduce card height and fit more commands on screen.
 
-![Mini mode preview](media/mini-mode-preview.svg)
+![Mini mode preview](media/mini-mode-preview.png)
 
 ## Example Configuration
 
