@@ -92,6 +92,21 @@ function activate(context) {
   );
 
   context.subscriptions.push(
+    vscode.commands.registerCommand("cursorTerminalButtons.openUserSettings", async () => {
+      const config = vscode.workspace.getConfiguration("terminalButtons");
+      const inspectedCommands = config.inspect("commands");
+
+      if (typeof inspectedCommands?.globalValue === "undefined") {
+        await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.Global);
+      }
+
+      await vscode.commands.executeCommand("workbench.action.openSettingsJson");
+      rebuildButtons(context);
+      commandDeckProvider.refresh();
+    })
+  );
+
+  context.subscriptions.push(
     vscode.commands.registerCommand("cursorTerminalButtons.createWorkspaceSettings", async () => {
       if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
         vscode.window.showWarningMessage("Open a workspace folder before creating Terminal Buttons settings.");
@@ -320,10 +335,48 @@ function getOrCreateTerminal(name) {
 }
 
 function getConfiguredCommands() {
-  return vscode.workspace
+  return getConfiguredCommandSections().flatMap((section) => section.commands);
+}
+
+function getConfiguredCommandSections() {
+  const inspectedCommands = vscode.workspace
     .getConfiguration("terminalButtons")
-    .get("commands", [])
-    .filter(isValidButtonConfig);
+    .inspect("commands");
+
+  const workspaceCommands = getValidCommands(inspectedCommands?.workspaceFolderValue)
+    .concat(getValidCommands(inspectedCommands?.workspaceValue));
+  const userCommands = getValidCommands(inspectedCommands?.globalValue);
+  const sections = [];
+
+  if (workspaceCommands.length > 0) {
+    sections.push({
+      id: "workspace",
+      label: "Project",
+      commands: workspaceCommands
+    });
+  }
+
+  if (userCommands.length > 0) {
+    sections.push({
+      id: "user",
+      label: "User",
+      commands: userCommands
+    });
+  }
+
+  if (sections.length === 0) {
+    sections.push({
+      id: "default",
+      label: "Default",
+      commands: getValidCommands(inspectedCommands?.defaultValue || DEFAULT_COMMANDS)
+    });
+  }
+
+  return sections;
+}
+
+function getValidCommands(value) {
+  return Array.isArray(value) ? value.filter(isValidButtonConfig) : [];
 }
 
 function sanitizeCssColor(value, fallback) {
@@ -382,6 +435,10 @@ class CommandDeckProvider {
         vscode.commands.executeCommand("cursorTerminalButtons.openSettings");
       }
 
+      if (message && message.type === "userSettings") {
+        vscode.commands.executeCommand("cursorTerminalButtons.openUserSettings");
+      }
+
       if (message && message.type === "refresh") {
         vscode.commands.executeCommand("cursorTerminalButtons.refresh");
       }
@@ -408,28 +465,45 @@ class CommandDeckProvider {
 
   getHtml(webview) {
     const nonce = getNonce();
-    const commands = getConfiguredCommands();
+    const sections = getConfiguredCommandSections();
+    const commands = sections.flatMap((section) => section.commands);
     const compactDeck = vscode.workspace
       .getConfiguration("terminalButtons")
       .get("compactDeck", false);
     const cspSource = webview.cspSource;
 
-    const commandCards = commands
-      .map((command, index) => {
-        const paletteColor = DEFAULT_BUTTON_PALETTE[index % DEFAULT_BUTTON_PALETTE.length];
-        const backgroundColor = sanitizeCssColor(command.backgroundColor, paletteColor.backgroundColor);
-        const color = sanitizeCssColor(command.color, paletteColor.color);
-        const description = command.description || command.command;
+    let commandIndex = 0;
+    const commandSections = sections
+      .map((section) => {
+        const cards = section.commands
+          .map((command) => {
+            const index = commandIndex;
+            commandIndex += 1;
+            const paletteColor = DEFAULT_BUTTON_PALETTE[index % DEFAULT_BUTTON_PALETTE.length];
+            const backgroundColor = sanitizeCssColor(command.backgroundColor, paletteColor.backgroundColor);
+            const color = sanitizeCssColor(command.color, paletteColor.color);
+            const description = command.description || command.command;
+
+            return `
+              <button class="command-card" style="--button-bg: ${backgroundColor}; --button-fg: ${color};" data-index="${index}">
+                <span class="command-top">
+                  <span class="command-label">${escapeHtml(command.label)}</span>
+                  <span class="command-terminal">${escapeHtml(command.terminalName || command.label)}</span>
+                </span>
+                <span class="command-description">${escapeHtml(description)}</span>
+                <span class="command-text">${escapeHtml(command.command)}</span>
+              </button>
+            `;
+          })
+          .join("");
 
         return `
-          <button class="command-card" style="--button-bg: ${backgroundColor}; --button-fg: ${color};" data-index="${index}">
-            <span class="command-top">
-              <span class="command-label">${escapeHtml(command.label)}</span>
-              <span class="command-terminal">${escapeHtml(command.terminalName || command.label)}</span>
-            </span>
-            <span class="command-description">${escapeHtml(description)}</span>
-            <span class="command-text">${escapeHtml(command.command)}</span>
-          </button>
+          <section class="command-section" data-section="${escapeHtml(section.id)}">
+            <h2 class="section-title">${escapeHtml(section.label)} Commands</h2>
+            <div class="deck">
+              ${cards}
+            </div>
+          </section>
         `;
       })
       .join("");
@@ -496,6 +570,21 @@ class CommandDeckProvider {
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 10px;
             align-items: stretch;
+          }
+
+          .command-section {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 14px;
+          }
+
+          .section-title {
+            margin: 0;
+            color: var(--vscode-descriptionForeground);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0;
+            text-transform: uppercase;
           }
 
           .command-card {
@@ -595,6 +684,11 @@ class CommandDeckProvider {
             gap: 8px;
           }
 
+          body.compact .command-section {
+            gap: 6px;
+            margin-bottom: 10px;
+          }
+
           body.compact .command-card {
             min-height: 64px;
             padding: 9px 10px;
@@ -624,10 +718,11 @@ class CommandDeckProvider {
         <nav class="toolbar" aria-label="Command list actions">
           <button class="toolbar-button secondary" type="button" data-action="refresh">Refresh</button>
           <button class="toolbar-button secondary" type="button" data-action="toggleSize">${compactDeck ? "Full Size" : "Mini Mode"}</button>
-          <button class="toolbar-button" type="button" data-action="settings">Edit List</button>
+          <button class="toolbar-button" type="button" data-action="settings">Edit Project</button>
+          <button class="toolbar-button" type="button" data-action="userSettings">Edit User</button>
         </nav>
-        <main class="deck">
-          ${commands.length > 0 ? commandCards : emptyState}
+        <main>
+          ${commands.length > 0 ? commandSections : emptyState}
         </main>
         <script nonce="${nonce}">
           const vscode = acquireVsCodeApi();

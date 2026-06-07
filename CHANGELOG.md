@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.4
+
+- Shows project and user command lists together.
+- Added separate `Edit Project` and `Edit User` buttons.
+
 ## 0.0.3
 
 - Added status bar foreground and theme background color options.

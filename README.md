@@ -85,7 +85,14 @@ Colors are assigned automatically when `backgroundColor` and `color` are omitted
 
 ## Workspace vs User Settings
 
-`terminalButtons.commands` is usually best kept in workspace settings because terminal commands often depend on the current project.
+`terminalButtons.commands` can live in both user settings and workspace settings.
+
+Terminal Shortcut Buttons reads both lists and shows them together:
+
+- `Project Commands` from the current workspace `settings.json`
+- `User Commands` from your global user `settings.json`
+
+Project commands are shown first, followed by user commands.
 
 Use workspace settings for project-specific command lists:
 
@@ -115,7 +122,11 @@ Use user settings for UI preferences you want everywhere:
 
 Cursor and VS Code merge settings using their normal priority rules. Workspace settings override user settings for the current project.
 
-The `Edit List` button opens the current workspace `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
+For `terminalButtons.commands`, this extension reads both scopes directly so project and user command lists can appear at the same time.
+
+The `Edit Project` button opens the current workspace `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
+
+The `Edit User` button opens your global user `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there too.
 
 ## Settings
 
@@ -145,7 +156,8 @@ The `Edit List` button opens the current workspace `settings.json`. If `terminal
 ## Commands
 
 - `Terminal Buttons: Refresh Buttons`
-- `Terminal Buttons: Edit Command List`
+- `Terminal Buttons: Edit Project Command List`
+- `Terminal Buttons: Edit User Command List`
 - `Terminal Buttons: Toggle Command Deck Size`
 - `Terminal Buttons: Create Workspace Settings`
 
