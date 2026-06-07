@@ -124,7 +124,7 @@ Cursor and VS Code merge settings using their normal priority rules. Workspace s
 
 For `terminalButtons.commands`, this extension reads both scopes directly so project and user command lists can appear at the same time.
 
-The `Edit Project` button opens the current workspace `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
+The `Edit Project` button opens the current workspace `.vscode/settings.json` file directly. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
 
 The `Edit User` button opens your global user `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there too.
 

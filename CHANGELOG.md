@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.5
+
+- Changed `Edit Project` to open the actual workspace `.vscode/settings.json` file directly.
+
 ## 0.0.4
 
 - Shows project and user command lists together.

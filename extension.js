@@ -72,20 +72,25 @@ function activate(context) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("cursorTerminalButtons.openSettings", async () => {
-      const config = vscode.workspace.getConfiguration("terminalButtons");
-
       if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
         vscode.commands.executeCommand("workbench.action.openSettings", "terminalButtons.commands");
         return;
       }
 
+      const workspaceFolder = vscode.workspace.workspaceFolders[0];
+      const settingsUri = vscode.Uri.joinPath(workspaceFolder.uri, ".vscode", "settings.json");
+      const config = vscode.workspace.getConfiguration("terminalButtons", workspaceFolder.uri);
       const inspectedCommands = config.inspect("commands");
 
-      if (typeof inspectedCommands?.workspaceValue === "undefined") {
-        await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.Workspace);
+      if (
+        typeof inspectedCommands?.workspaceFolderValue === "undefined" &&
+        typeof inspectedCommands?.workspaceValue === "undefined"
+      ) {
+        await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.WorkspaceFolder);
       }
 
-      await vscode.commands.executeCommand("workbench.action.openWorkspaceSettingsFile");
+      const document = await vscode.workspace.openTextDocument(settingsUri);
+      await vscode.window.showTextDocument(document);
       rebuildButtons(context);
       commandDeckProvider.refresh();
     })
