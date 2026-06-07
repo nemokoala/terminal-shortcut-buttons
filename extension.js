@@ -71,8 +71,23 @@ function activate(context) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("cursorTerminalButtons.openSettings", () => {
-      vscode.commands.executeCommand("workbench.action.openSettings", "terminalButtons.commands");
+    vscode.commands.registerCommand("cursorTerminalButtons.openSettings", async () => {
+      const config = vscode.workspace.getConfiguration("terminalButtons");
+
+      if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
+        vscode.commands.executeCommand("workbench.action.openSettings", "terminalButtons.commands");
+        return;
+      }
+
+      const inspectedCommands = config.inspect("commands");
+
+      if (typeof inspectedCommands?.workspaceValue === "undefined") {
+        await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.Workspace);
+      }
+
+      await vscode.commands.executeCommand("workbench.action.openWorkspaceSettingsFile");
+      rebuildButtons(context);
+      commandDeckProvider.refresh();
     })
   );
 
