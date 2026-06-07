@@ -83,6 +83,40 @@ Colors are assigned automatically when `backgroundColor` and `color` are omitted
 }
 ```
 
+## Workspace vs User Settings
+
+`terminalButtons.commands` is usually best kept in workspace settings because terminal commands often depend on the current project.
+
+Use workspace settings for project-specific command lists:
+
+```json
+{
+  "terminalButtons.commands": [
+    {
+      "label": "Dev",
+      "command": "npm run dev"
+    },
+    {
+      "label": "Build",
+      "command": "npm run build"
+    }
+  ]
+}
+```
+
+Use user settings for UI preferences you want everywhere:
+
+```json
+{
+  "terminalButtons.showStatusBarButtons": true,
+  "terminalButtons.compactDeck": true
+}
+```
+
+Cursor and VS Code merge settings using their normal priority rules. Workspace settings override user settings for the current project.
+
+The `Edit List` button opens the current workspace `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
+
 ## Settings
 
 | Setting | Type | Default | Description |
