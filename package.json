@@ -2,7 +2,7 @@
   "name": "terminal-shortcut-buttons",
   "displayName": "Terminal Shortcut Buttons",
   "description": "Adds configurable shortcut buttons for running terminal commands.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "nemokoala",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -47,7 +47,7 @@
       },
       {
         "command": "cursorTerminalButtons.openUserSettings",
-        "title": "Terminal Buttons: Edit User Command List"
+        "title": "Terminal Buttons: Edit Global Command List"
       },
       {
         "command": "cursorTerminalButtons.createWorkspaceSettings",

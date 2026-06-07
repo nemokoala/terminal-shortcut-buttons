@@ -1,4 +1,6 @@
 const vscode = require("vscode");
+const fs = require("fs/promises");
+const path = require("path");
 
 const EXTENSION_COMMAND_PREFIX = "cursorTerminalButtons.run";
 const WEBVIEW_VIEW_ID = "cursorTerminalButtons.deck";
@@ -86,7 +88,7 @@ function activate(context) {
         typeof inspectedCommands?.workspaceFolderValue === "undefined" &&
         typeof inspectedCommands?.workspaceValue === "undefined"
       ) {
-        await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.WorkspaceFolder);
+        await ensureWorkspaceSettingsCommands(settingsUri);
       }
 
       const document = await vscode.workspace.openTextDocument(settingsUri);
@@ -105,7 +107,13 @@ function activate(context) {
         await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.Global);
       }
 
-      await vscode.commands.executeCommand("workbench.action.openSettingsJson");
+      try {
+        const document = await vscode.workspace.openTextDocument(getUserSettingsUri());
+        await vscode.window.showTextDocument(document);
+      } catch {
+        await vscode.commands.executeCommand("workbench.action.openSettingsJson");
+      }
+
       rebuildButtons(context);
       commandDeckProvider.refresh();
     })
@@ -184,9 +192,7 @@ function rebuildButtons(context) {
     return;
   }
 
-  const commands = vscode.workspace
-    .getConfiguration("terminalButtons")
-    .get("commands", []);
+  const commands = getConfiguredCommands();
 
   commands.forEach((buttonConfig, index) => {
     if (!isValidButtonConfig(buttonConfig)) {
@@ -382,6 +388,84 @@ function getConfiguredCommandSections() {
 
 function getValidCommands(value) {
   return Array.isArray(value) ? value.filter(isValidButtonConfig) : [];
+}
+
+function getUserSettingsUri() {
+  const productDirectory = getSettingsProductDirectory();
+
+  if (process.platform === "win32") {
+    const appData = process.env.APPDATA;
+
+    if (!appData) {
+      throw new Error("APPDATA is not available.");
+    }
+
+    return vscode.Uri.file(`${appData}\\${productDirectory}\\User\\settings.json`);
+  }
+
+  if (process.platform === "darwin") {
+    const home = process.env.HOME;
+
+    if (!home) {
+      throw new Error("HOME is not available.");
+    }
+
+    return vscode.Uri.file(`${home}/Library/Application Support/${productDirectory}/User/settings.json`);
+  }
+
+  const configHome = process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`;
+
+  if (!configHome) {
+    throw new Error("User config directory is not available.");
+  }
+
+  return vscode.Uri.file(`${configHome}/${productDirectory}/User/settings.json`);
+}
+
+function getSettingsProductDirectory() {
+  const appName = vscode.env.appName.toLowerCase();
+
+  if (appName.includes("cursor")) {
+    return "Cursor";
+  }
+
+  if (appName.includes("codium")) {
+    return "VSCodium";
+  }
+
+  if (appName.includes("insiders")) {
+    return "Code - Insiders";
+  }
+
+  return "Code";
+}
+
+async function ensureWorkspaceSettingsCommands(settingsUri) {
+  if (settingsUri.scheme !== "file") {
+    await vscode.workspace
+      .getConfiguration("terminalButtons")
+      .update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.WorkspaceFolder);
+    return;
+  }
+
+  await fs.mkdir(path.dirname(settingsUri.fsPath), { recursive: true });
+
+  let settings = {};
+
+  try {
+    const rawSettings = await fs.readFile(settingsUri.fsPath, "utf8");
+    settings = rawSettings.trim() ? JSON.parse(rawSettings) : {};
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  if (!Array.isArray(settings["terminalButtons.commands"])) {
+    settings["terminalButtons.commands"] = DEFAULT_COMMANDS;
+  }
+
+  await fs.writeFile(settingsUri.fsPath, `${JSON.stringify(settings, null, 2)}\n`, "utf8");
 }
 
 function sanitizeCssColor(value, fallback) {
@@ -724,7 +808,7 @@ class CommandDeckProvider {
           <button class="toolbar-button secondary" type="button" data-action="refresh">Refresh</button>
           <button class="toolbar-button secondary" type="button" data-action="toggleSize">${compactDeck ? "Full Size" : "Mini Mode"}</button>
           <button class="toolbar-button" type="button" data-action="settings">Edit Project</button>
-          <button class="toolbar-button" type="button" data-action="userSettings">Edit User</button>
+          <button class="toolbar-button" type="button" data-action="userSettings">Edit Global</button>
         </nav>
         <main>
           ${commands.length > 0 ? commandSections : emptyState}

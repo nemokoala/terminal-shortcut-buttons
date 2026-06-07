@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.6
+
+- Fixed status bar buttons to show both project and user command lists.
+- Changed `Edit User` to open the user `settings.json` file directly when possible.
+
 ## 0.0.5
 
 - Changed `Edit Project` to open the actual workspace `.vscode/settings.json` file directly.

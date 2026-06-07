@@ -90,9 +90,9 @@ Colors are assigned automatically when `backgroundColor` and `color` are omitted
 Terminal Shortcut Buttons reads both lists and shows them together:
 
 - `Project Commands` from the current workspace `settings.json`
-- `User Commands` from your global user `settings.json`
+- `Global Commands` from your global user `settings.json`
 
-Project commands are shown first, followed by user commands.
+Project commands are shown first, followed by global commands. This applies to both the Command Deck and the optional bottom status bar buttons.
 
 Use workspace settings for project-specific command lists:
 
@@ -124,9 +124,9 @@ Cursor and VS Code merge settings using their normal priority rules. Workspace s
 
 For `terminalButtons.commands`, this extension reads both scopes directly so project and user command lists can appear at the same time.
 
-The `Edit Project` button opens the current workspace `.vscode/settings.json` file directly. If `terminalButtons.commands` is missing, it creates a starter list there so you can edit it directly.
+The `Edit Project` button opens the current workspace `.vscode/settings.json` file directly. If the `.vscode` folder, `settings.json`, or `terminalButtons.commands` entry is missing, it creates the missing pieces and adds a starter command list.
 
-The `Edit User` button opens your global user `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there too.
+The `Edit Global` button opens your global user `settings.json`. If `terminalButtons.commands` is missing, it creates a starter list there too.
 
 ## Settings
 
@@ -157,7 +157,7 @@ The `Edit User` button opens your global user `settings.json`. If `terminalButto
 
 - `Terminal Buttons: Refresh Buttons`
 - `Terminal Buttons: Edit Project Command List`
-- `Terminal Buttons: Edit User Command List`
+- `Terminal Buttons: Edit Global Command List`
 - `Terminal Buttons: Toggle Command Deck Size`
 - `Terminal Buttons: Create Workspace Settings`
 
