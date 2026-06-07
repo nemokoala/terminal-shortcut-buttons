@@ -2,7 +2,7 @@
   "name": "terminal-shortcut-buttons",
   "displayName": "Terminal Shortcut Buttons",
   "description": "Adds configurable shortcut buttons for running terminal commands.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "nemokoala",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -155,6 +155,23 @@
               "color": {
                 "type": "string",
                 "description": "Optional CSS color for the Command Deck button text."
+              },
+              "statusBarColor": {
+                "type": "string",
+                "description": "Optional status bar foreground color. CSS hex colors and theme color IDs are supported."
+              },
+              "statusBarBackgroundColor": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "prominent",
+                  "warning",
+                  "error",
+                  "statusBarItem.prominentBackground",
+                  "statusBarItem.warningBackground",
+                  "statusBarItem.errorBackground"
+                ],
+                "description": "Optional status bar background style. VS Code only supports theme-based status bar item backgrounds."
               },
               "terminalName": {
                 "type": "string",

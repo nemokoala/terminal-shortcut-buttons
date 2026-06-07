@@ -187,6 +187,7 @@ function rebuildButtons(context) {
     item.text = formatButtonText(buttonConfig);
     item.tooltip = buttonConfig.command;
     item.command = commandId;
+    applyStatusBarColors(item, buttonConfig);
     item.show();
 
     statusBarItems.push(item);
@@ -224,6 +225,75 @@ function getAlignment(alignment) {
 function formatButtonText(config) {
   const label = config.label.trim();
   return config.icon ? `$(${config.icon}) ${label}` : label;
+}
+
+function applyStatusBarColors(item, config) {
+  const foregroundColor = getStatusBarForegroundColor(config);
+  const backgroundColor = getStatusBarBackgroundColor(config.statusBarBackgroundColor);
+
+  if (foregroundColor) {
+    item.color = foregroundColor;
+  }
+
+  if (backgroundColor) {
+    item.backgroundColor = backgroundColor;
+  }
+}
+
+function getStatusBarForegroundColor(config) {
+  if (typeof config.statusBarColor === "string" && config.statusBarColor.trim()) {
+    return toThemeOrCssColor(config.statusBarColor);
+  }
+
+  if (typeof config.color === "string" && config.color.trim()) {
+    return toThemeOrCssColor(config.color);
+  }
+
+  return undefined;
+}
+
+function toThemeOrCssColor(value) {
+  const trimmedValue = value.trim();
+
+  if (/^#[0-9a-fA-F]{3,8}$/.test(trimmedValue) || /^[a-zA-Z]+$/.test(trimmedValue)) {
+    return trimmedValue;
+  }
+
+  if (/^[a-zA-Z][\w.-]*$/.test(trimmedValue)) {
+    return new vscode.ThemeColor(trimmedValue);
+  }
+
+  return undefined;
+}
+
+function getStatusBarBackgroundColor(value) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const normalizedValue = value.trim();
+
+  if (!normalizedValue || normalizedValue === "none") {
+    return undefined;
+  }
+
+  const knownBackgrounds = {
+    prominent: "statusBarItem.prominentBackground",
+    warning: "statusBarItem.warningBackground",
+    error: "statusBarItem.errorBackground"
+  };
+
+  const themeColorId = knownBackgrounds[normalizedValue] || normalizedValue;
+
+  if (
+    themeColorId === "statusBarItem.prominentBackground" ||
+    themeColorId === "statusBarItem.warningBackground" ||
+    themeColorId === "statusBarItem.errorBackground"
+  ) {
+    return new vscode.ThemeColor(themeColorId);
+  }
+
+  return undefined;
 }
 
 function runTerminalCommand(config) {

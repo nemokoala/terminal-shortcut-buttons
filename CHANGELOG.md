@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.3
+
+- Added status bar foreground and theme background color options.
+
 ## 0.0.2
 
 - Changed `Edit List` to open workspace `settings.json`.

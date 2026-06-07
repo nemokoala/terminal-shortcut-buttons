@@ -47,7 +47,9 @@ Add this to your workspace `.vscode/settings.json`:
       "command": "npm run dev",
       "terminalName": "Dev Server",
       "reuseTerminal": true,
-      "description": "Start the local development server."
+      "description": "Start the local development server.",
+      "statusBarColor": "#ffffff",
+      "statusBarBackgroundColor": "prominent"
     },
     {
       "label": "Build",
@@ -101,6 +103,8 @@ Colors are assigned automatically when `backgroundColor` and `color` are omitted
 | `reuseTerminal` | boolean | Reuse the same named terminal when possible. |
 | `backgroundColor` | string | Optional CSS color for the Command Deck card. |
 | `color` | string | Optional CSS text color for the Command Deck card. |
+| `statusBarColor` | string | Optional foreground color for the status bar button. |
+| `statusBarBackgroundColor` | string | Optional status bar background style: `prominent`, `warning`, `error`, or `none`. |
 | `alignment` | string | Status bar alignment: `left` or `right`. |
 | `priority` | number | Status bar priority. |
 
