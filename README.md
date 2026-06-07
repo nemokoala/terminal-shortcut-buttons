@@ -103,7 +103,7 @@ Colors are assigned automatically when `backgroundColor` and `color` are omitted
 | `reuseTerminal` | boolean | Reuse the same named terminal when possible. |
 | `backgroundColor` | string | Optional CSS color for the Command Deck card. |
 | `color` | string | Optional CSS text color for the Command Deck card. |
-| `statusBarColor` | string | Optional foreground color for the status bar button. |
+| `statusBarColor` | string | Optional foreground color for the status bar button. Defaults to `color` when omitted. |
 | `statusBarBackgroundColor` | string | Optional status bar background style: `prominent`, `warning`, `error`, or `none`. |
 | `alignment` | string | Status bar alignment: `left` or `right`. |
 | `priority` | number | Status bar priority. |

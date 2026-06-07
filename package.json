@@ -158,7 +158,7 @@
               },
               "statusBarColor": {
                 "type": "string",
-                "description": "Optional status bar foreground color. CSS hex colors and theme color IDs are supported."
+                "description": "Optional status bar foreground color. Defaults to color when omitted. CSS hex colors and theme color IDs are supported."
               },
               "statusBarBackgroundColor": {
                 "type": "string",
