@@ -28,7 +28,7 @@ In compatible editors such as Cursor, search for `Terminal Shortcut Buttons` in 
 
 Open the `Terminal Buttons` icon in the Activity Bar to use the Command Deck.
 
-The deck automatically lays buttons out in multiple columns when the panel is wide enough. Use `Mini Mode` to reduce card height and fit more commands on screen.
+The deck automatically lays buttons out in multiple columns when the panel is wide enough. Use `Mini Mode` to reduce card height and fit more commands on screen. The size toggle saves to your global user settings so the same layout is used across projects.
 
 ![Mini mode preview](media/mini-mode-preview.png)
 
@@ -39,7 +39,6 @@ Add this to your workspace `.vscode/settings.json`:
 ```json
 {
   "terminalButtons.showStatusBarButtons": true,
-  "terminalButtons.compactDeck": false,
   "terminalButtons.commands": [
     {
       "label": "Dev",
@@ -120,6 +119,8 @@ Use user settings for UI preferences you want everywhere:
 }
 ```
 
+`terminalButtons.compactDeck` is a global UI preference. The `Full Size` / `Mini Mode` button in the Command Deck writes to user settings and removes any workspace override for that key.
+
 Cursor and VS Code merge settings using their normal priority rules. Workspace settings override user settings for the current project.
 
 For `terminalButtons.commands`, this extension reads both scopes directly so project and user command lists can appear at the same time.
@@ -134,7 +135,7 @@ The `Edit Global` button opens your global user `settings.json`. If `terminalBut
 | --- | --- | --- | --- |
 | `terminalButtons.commands` | array | sample commands | Button definitions. |
 | `terminalButtons.showStatusBarButtons` | boolean | `true` | Show shortcut buttons in the bottom status bar. |
-| `terminalButtons.compactDeck` | boolean | `false` | Use shorter cards in the Command Deck. |
+| `terminalButtons.compactDeck` | boolean | `false` | Use shorter cards in the Command Deck. Stored in user settings when toggled from the deck. |
 
 ## Button Options
 

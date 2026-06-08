@@ -128,7 +128,6 @@ function activate(context) {
 
       const config = vscode.workspace.getConfiguration("terminalButtons");
       await config.update("showStatusBarButtons", true, vscode.ConfigurationTarget.Workspace);
-      await config.update("compactDeck", false, vscode.ConfigurationTarget.Workspace);
       await config.update("commands", DEFAULT_COMMANDS, vscode.ConfigurationTarget.Workspace);
       rebuildButtons(context);
       commandDeckProvider.refresh();
@@ -140,11 +139,13 @@ function activate(context) {
     vscode.commands.registerCommand("cursorTerminalButtons.toggleCompactDeck", async () => {
       const config = vscode.workspace.getConfiguration("terminalButtons");
       const compactDeck = config.get("compactDeck", false);
-      const target = vscode.workspace.workspaceFolders
-        ? vscode.ConfigurationTarget.Workspace
-        : vscode.ConfigurationTarget.Global;
 
-      await config.update("compactDeck", !compactDeck, target);
+      await config.update("compactDeck", !compactDeck, vscode.ConfigurationTarget.Global);
+
+      if (config.inspect("compactDeck")?.workspaceValue !== undefined) {
+        await config.update("compactDeck", undefined, vscode.ConfigurationTarget.Workspace);
+      }
+
       commandDeckProvider.refresh();
     })
   );

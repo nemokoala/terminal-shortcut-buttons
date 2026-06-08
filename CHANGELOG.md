@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.7
+
+- Changed `Full Size` / `Mini Mode` to save `terminalButtons.compactDeck` in global user settings.
+- Clears a workspace `compactDeck` override when toggling deck size so the global preference applies.
+- Stopped writing `terminalButtons.compactDeck` when creating workspace settings from `Edit Project`.
+
 ## 0.0.6
 
 - Fixed status bar buttons to show both project and user command lists.
