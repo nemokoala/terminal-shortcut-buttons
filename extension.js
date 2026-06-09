@@ -139,11 +139,20 @@ function activate(context) {
     vscode.commands.registerCommand("cursorTerminalButtons.toggleCompactDeck", async () => {
       const config = vscode.workspace.getConfiguration("terminalButtons");
       const compactDeck = config.get("compactDeck", false);
+      const inspected = config.inspect("compactDeck");
 
       await config.update("compactDeck", !compactDeck, vscode.ConfigurationTarget.Global);
 
-      if (config.inspect("compactDeck")?.workspaceValue !== undefined) {
+      if (inspected?.workspaceValue !== undefined) {
         await config.update("compactDeck", undefined, vscode.ConfigurationTarget.Workspace);
+      }
+
+      for (const folder of vscode.workspace.workspaceFolders ?? []) {
+        const folderConfig = vscode.workspace.getConfiguration("terminalButtons", folder.uri);
+
+        if (folderConfig.inspect("compactDeck")?.workspaceFolderValue !== undefined) {
+          await folderConfig.update("compactDeck", undefined, vscode.ConfigurationTarget.WorkspaceFolder);
+        }
       }
 
       commandDeckProvider.refresh();

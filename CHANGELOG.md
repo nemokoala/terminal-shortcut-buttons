@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.8
+
+- Command Deck size (`Full Size` / `Mini Mode`) is managed in global user settings only, not per project.
+- Toggling deck size now removes any leftover `terminalButtons.compactDeck` override from workspace settings, including `.vscode/settings.json`.
+
 ## 0.0.7
 
 - Changed `Full Size` / `Mini Mode` to save `terminalButtons.compactDeck` in global user settings.

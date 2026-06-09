@@ -2,7 +2,7 @@
   "name": "terminal-shortcut-buttons",
   "displayName": "Terminal Shortcut Buttons",
   "description": "Adds configurable shortcut buttons for running terminal commands.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "nemokoala",
   "license": "MIT",
   "icon": "media/icon.png",
